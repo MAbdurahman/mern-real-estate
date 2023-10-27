@@ -6,6 +6,8 @@ import colors from 'colors';
 import morgan from 'morgan';
 import connectDatabase from './config/configDatabase.js';
 
+import userRouter from './routes/userRoute.js';
+
 
 
 
@@ -24,10 +26,10 @@ if (process.env.NODE_ENV === 'DEVELOPMENT') {
 }
 app.use(express.json());
 
+
+app.use('/api/v1.0/user', userRouter);
 //**************** routes****************//
-app.get('/', (req, res) => {
-    res.send('API is at Home');
-});
+
 
 
 
