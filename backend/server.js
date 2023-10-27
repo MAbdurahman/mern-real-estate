@@ -9,13 +9,6 @@ import connectDatabase from './config/configDatabase.js';
 
 
 
-
-
-
-
-
-
-
 //**************** variables ****************//
 const app = express();
 const PORT = process.env.PORT || 5000;
