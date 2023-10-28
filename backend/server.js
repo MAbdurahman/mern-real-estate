@@ -28,9 +28,22 @@ if (process.env.NODE_ENV === 'DEVELOPMENT') {
 app.use(express.json());
 
 
+//**************** routes****************//
 app.use('/api/v1.0/user', userRouter);
 app.use('/api/v1.0/auth', authRouter);
-//**************** routes****************//
+
+
+
+
+app.use((err, req, res, next) => {
+    const statusCode = err.statusCode || 500;
+    const message = err.message || 'Internal Server Error';
+    return res.status(statusCode).json({
+        success: false,
+        statusCode,
+        message,
+    });
+});
 
 
 
