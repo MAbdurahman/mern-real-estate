@@ -7,6 +7,7 @@ import morgan from 'morgan';
 import connectDatabase from './config/configDatabase.js';
 
 import userRouter from './routes/userRoute.js';
+import authRouter from './routes/authRoute.js';
 
 
 
@@ -28,6 +29,7 @@ app.use(express.json());
 
 
 app.use('/api/v1.0/user', userRouter);
+app.use('/api/v1.0/auth', authRouter);
 //**************** routes****************//
 
 
