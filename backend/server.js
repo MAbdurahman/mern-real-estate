@@ -26,15 +26,6 @@ if (process.env.NODE_ENV === 'DEVELOPMENT') {
     app.use(morgan('dev'));
 }
 app.use(express.json());
-
-
-//**************** routes****************//
-app.use('/api/v1.0/user', userRouter);
-app.use('/api/v1.0/auth', authRouter);
-
-
-
-
 app.use((err, req, res, next) => {
     const statusCode = err.statusCode || 500;
     const message = err.message || 'Internal Server Error';
@@ -44,6 +35,15 @@ app.use((err, req, res, next) => {
         message,
     });
 });
+
+//**************** routes****************//
+app.use('/api/v1.0/user', userRouter);
+app.use('/api/v1.0/auth', authRouter);
+
+
+
+
+
 
 
 
