@@ -8,13 +8,37 @@ export default function SignUp() {
     const navigate = useNavigate();
 
     function handleChange(e) {
-
-        console.log('handleChange', e.target.value);
+        setFormData({
+            ...formData,
+            [e.target.id]: e.target.value,
+        });
     }
 
-    function handleSubmit(e) {
+    async function handleSubmit(e) {
         e.preventDefault();
-        console.log('handleSubmit', e.target);
+        try {
+            setLoading(true);
+            const res = await fetch('/api/v1.0/auth/sign-up', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify(formData),
+            });
+            const data = await res.json();
+
+            if (data.success === false) {
+                setLoading(false);
+                setError(data.message);
+                return;
+            }
+            setLoading(false);
+            setError(null);
+            navigate('/sign-in');
+        } catch (error) {
+            setLoading(false);
+            setError(error.message);
+        }
     }
 
     return (<div className='p-3 max-w-lg mx-auto'>
