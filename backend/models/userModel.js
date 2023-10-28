@@ -19,14 +19,13 @@ const userSchema = new mongoose.Schema({
         type: String,
         trim: true,
         required: [true, 'Email is required!'],
-        unique: true,
+        unique: [true, 'Email already exists!'],
         match: [email_pattern, 'Enter a valid email address!']
     }, password: {
         type: String,
         trim: true,
-        required: [true, 'Please enter your password!'],
+        required: [true, 'Password is required!'],
         minlength: [8, 'Password must be at least 8 characters!'],
-        select: false,
     }, avatar: {
         type: String,
         default: "https://res.cloudinary.com/mdbdrrhm/image/upload/v1635086610/people/default-user_dmmlom.png"
