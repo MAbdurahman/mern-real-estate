@@ -4,10 +4,9 @@ import {useSelector} from 'react-redux';
 import {FaSearch} from 'react-icons/fa';
 
 export default function Header() {
-
+    const { currentUser } = useSelector((state) => state.user);
     const [searchTerm, setSearchTerm] = useState('');
     const navigate = useNavigate();
-
 
     function handleSubmit(e) {
         e.preventDefault();
@@ -48,13 +47,16 @@ export default function Header() {
                             About
                         </li>
                     </NavLink>
-                    <NavLink to='/sign-in'>
-{/*                        {currentUser ? (<img
+                    <NavLink to='/profile'>
+                        {currentUser ? (
+                            <img
                                 className='rounded-full h-7 w-7 object-cover'
                                 src={currentUser.avatar}
-                                alt='profile'
-                            />) : (<li className=' text-slate-700 hover:underline'> Sign in</li>)}*/}
-                        <li className='header-link-item text-slate-700 hover:underline'>Sign in</li>
+                                alt='profile avatar'
+                            />
+                        ) : (
+                            <li className=' text-slate-700 hover:underline'> Sign in</li>
+                        )}
                     </NavLink>
                 </ul>
             </div>
