@@ -14,6 +14,8 @@ import {
     deleteUserStart,
     deleteUserSuccess,
     signOutUserStart,
+    signOutUserSuccess,
+    signOutUserFailure
 } from '../redux/user/userSlice';
 
 export default function Profile() {
@@ -79,7 +81,20 @@ export default function Profile() {
     }
 
     async function handleDeleteUser() {
-        console.log('handleDeleteUser')
+        try {
+            dispatch(deleteUserStart());
+            const res = await fetch(`/api/v1.0/user/delete-user/${currentUser._id}`, {
+                method: 'DELETE',
+            });
+            const data = await res.json();
+            if (data.success === false) {
+                dispatch(deleteUserFailure(data.message));
+                return;
+            }
+            dispatch(deleteUserSuccess(data));
+        } catch (err) {
+            dispatch(deleteUserFailure(err.message));
+        }
     }
 
     async function handleShowListings() {
