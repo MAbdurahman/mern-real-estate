@@ -77,7 +77,18 @@ export default function Profile() {
     }
 
     async function handleSignOut() {
-        console.log('handleSignOut')
+        try {
+            dispatch(signOutUserStart());
+            const res = await fetch('/api/v1.0/auth/sign-out');
+            const data = await res.json();
+            if (data.success === false) {
+                dispatch(signOutUserFailure(data.message));
+                return;
+            }
+            dispatch(signOutUserSuccess(data));
+        } catch (err) {
+            dispatch(signOutUserFailure(err.message));
+        }
     }
 
     async function handleDeleteUser() {
@@ -175,10 +186,10 @@ export default function Profile() {
             onClick={handleDeleteUser}
             className='text-red-700 cursor-pointer'
         >
-          Delete account
+          Delete Account
         </span>
-            <span onClick={handleSignOut} className='text-red-700 cursor-pointer'>
-          Sign out
+            <span onClick={handleSignOut} className='text-slate-600 cursor-pointer'>
+          Sign Out
         </span>
         </div>
 

@@ -24,7 +24,7 @@ const {loading, error} = useSelector((state) => state.user);
     async function handleSubmit(e) {
         e.preventDefault();
         try {
-            dispatch(signInStart);
+            dispatch(signInStart());
             const res = await fetch('/api/v1.0/auth/sign-in', {
                 method: 'POST',
                 headers: {
