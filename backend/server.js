@@ -15,6 +15,7 @@ import listingRouter from './routes/listingRoute.js'
 const app = express();
 const PORT = process.env.PORT || 5000;
 const NODE_ENV = process.env.NODE_ENV;
+const API = process.env.API_ENV || "/api/v1.0/";
 
 //**************** configuration setup ****************//
 dotenv.config({path: 'backend/config/config.env'});
@@ -33,14 +34,14 @@ app.use(cookieParser());
 //**************** app listening ****************//
 const server = app.listen(PORT, () => {
     console.log(
-        `The server is listening at - http://127.0.0.1:${PORT} in ${NODE_ENV} mode🔥`
+        `The server is listening at - http://127.0.0.1:${PORT}${API} in ${NODE_ENV} mode🔥`
             .yellow
     );
 });
 
 //**************** routes****************//
 app.get('/api/v1.0/', (req, res) => {
-    res.send('<h1>Welcome to MERN Real Estate</h1>');
+    res.send('<h1 style="text-align:center; margin-top: 2em;">Welcome to MERN Real Estate</h1>');
 });
 app.use('/api/v1.0/user', userRouter);
 app.use('/api/v1.0/auth', authRouter);
