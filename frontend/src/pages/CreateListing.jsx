@@ -33,7 +33,34 @@ export default function CreateListing() {
 
 
     const handleChange = e => {
-        console.log('handleChange', e.target)
+        if (e.target.id === 'sell' || e.target.id === 'rent') {
+            setFormData({
+                ...formData,
+                type: e.target.id,
+            });
+        }
+
+        if (
+            e.target.id === 'parking' ||
+            e.target.id === 'furnished' ||
+            e.target.id === 'offer'
+        ) {
+            setFormData({
+                ...formData,
+                [e.target.id]: e.target.checked,
+            });
+        }
+
+        if (
+            e.target.type === 'number' ||
+            e.target.type === 'text' ||
+            e.target.type === 'textarea'
+        ) {
+            setFormData({
+                ...formData,
+                [e.target.id]: e.target.value,
+            });
+        }
 
     }
     const handleDeleteImage = index => {
@@ -109,7 +136,47 @@ export default function CreateListing() {
     }
 
     async function handleSubmit(e) {
-        console.log('handleSubmit', e.target)
+        e.preventDefault();
+        try {
+            if (formData.imageURLs.length < 1) {
+                setError('Must upload at least one image!');
+                setTimeout(() => {
+                    setError(false);
+                }, 3000);
+
+                return;
+            }
+
+            if (+formData.regularPrice < +formData.discountPrice) {
+                setError('Discount price must be lower than regular price');
+                setTimeout(() => {
+                    setError(false);
+                }, 3000);
+                return;
+            }
+
+            setLoading(true);
+            setError(false);
+            const res = await fetch('/api/v1.0/listing/create-listing', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({
+                    ...formData,
+                    userRef: currentUser._id,
+                }),
+            });
+            const data = await res.json();
+            setLoading(false);
+            if (data.success === false) {
+                setError(data.message);
+            }
+            navigate(`/listing/${data._id}`);
+        } catch (error) {
+            setError(error.message);
+            setLoading(false);
+        }
     }
 
 
@@ -152,10 +219,10 @@ export default function CreateListing() {
                     <div className='flex gap-2'>
                         <input
                             type='checkbox'
-                            id='sale'
+                            id='sell'
                             className='w-5'
                             onChange={handleChange}
-                            checked={formData.type === 'sale'}
+                            checked={formData.type === 'sell'}
                         />
                         <span>Sell</span>
                     </div>
@@ -177,7 +244,7 @@ export default function CreateListing() {
                             onChange={handleChange}
                             checked={formData.parking}
                         />
-                        <span>Parking spot</span>
+                        <span>Parking</span>
                     </div>
                     <div className='flex gap-2'>
                         <input
