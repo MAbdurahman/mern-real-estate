@@ -9,6 +9,7 @@ import connectDatabase from './config/configDatabase.js';
 
 import userRouter from './routes/userRoute.js';
 import authRouter from './routes/authRoute.js';
+import listingRouter from './routes/listingRoute.js'
 
 //**************** variables ****************//
 const app = express();
@@ -43,6 +44,7 @@ app.get('/api/v1.0/', (req, res) => {
 });
 app.use('/api/v1.0/user', userRouter);
 app.use('/api/v1.0/auth', authRouter);
+app.use('/api/v1.0/listing', listingRouter);
 
 
 //**************** handle errors middleware ****************//
