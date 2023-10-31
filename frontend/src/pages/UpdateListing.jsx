@@ -185,11 +185,13 @@ export default function UpdateListing() {
                 }),
             });
             const data = await res.json();
+
+            console.log(data._id)
             setLoading(false);
             if (data.success === false) {
                 setError(data.message);
             }
-            navigate(`/listings/${data._id}`);
+            navigate(`/listing/${data._id}`);
         } catch (error) {
             setError(error.message);
             setLoading(false);
