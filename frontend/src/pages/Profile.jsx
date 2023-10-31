@@ -134,7 +134,22 @@ export default function Profile() {
     }
 
     async function handleDeleteListing(listingId) {
-        console.log('handleDeleteListings')
+        try {
+            const res = await fetch(`/api/v1.0/listing/delete-listing/${listingId}`, {
+                method: 'DELETE',
+            });
+            const data = await res.json();
+            if (data.success === false) {
+                console.log(data.message);
+                return;
+            }
+
+            setUserListings((prev) =>
+                prev.filter((listing) => listing._id !== listingId)
+            );
+        } catch (err) {
+            console.log(err.message);
+        }
     }
 
     useEffect(() => {
