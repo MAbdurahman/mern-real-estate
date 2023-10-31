@@ -1,5 +1,6 @@
 import bcryptjs from "bcryptjs";
 import User from "../models/userModel.js";
+import Listing from "../models/listingModel.js";
 import {errorHandler} from "../utils/errorHandler.js";
 
 export const test = (req, res) => {
@@ -50,4 +51,22 @@ export const deleteUser = async (req, res, next) => {
     } catch (err) {
         next(err)
     }
+}
+
+export const getUserListings = async (req, res, next) => {
+    if (req.user.id === req.params.id) {
+        try {
+            const listings = await Listing.find({ userRef: req.params.id });
+            res.status(200).json(listings);
+
+        } catch (err) {
+            next(err);
+        }
+    } else {
+        return next(errorHandler('401', 'User Authorization Denied!'));
+    }
+}
+
+export const getUsers = async (req, res, next) => {
+    console.log('getUsers', req);
 }
