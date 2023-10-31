@@ -109,7 +109,28 @@ export default function Profile() {
     }
 
     async function handleShowListings() {
-        console.log('handleShowListings')
+        try {
+            setShowListingsError(false);
+            const res = await fetch(`/api/v1.0/user/get-listings/${currentUser._id}`);
+            const data = await res.json();
+
+            if (data.success === false) {
+                setShowListingsError(true);
+                setTimeout(() => {
+                    setShowListingsError(false);
+                }, 5000)
+                return;
+            }
+
+            console.log(data)
+            setUserListings(data);
+        } catch (err) {
+            setShowListingsError(true);
+            setTimeout(() => {
+                setShowListingsError(false);
+            }, 5000)
+            return;
+        }
     }
 
     async function handleDeleteListing(listingId) {
@@ -123,7 +144,7 @@ export default function Profile() {
     }, [file]);
 
     return (<div className='p-3 max-w-lg mx-auto'>
-        <h2 className='text-3xl font-semibold text-center my-7'>Profile</h2>
+        <h2 className='text-3xl font-semibold text-center my-7'>{currentUser.username} Profile</h2>
         <form onSubmit={handleSubmit} className='flex flex-col gap-4'>
             <input
                 onChange={(e) => setFile(e.target.files[0])}
@@ -184,11 +205,11 @@ export default function Profile() {
         <div className='flex justify-between mt-5'>
         <span
             onClick={handleDeleteUser}
-            className='text-red-700 cursor-pointer'
+            className='text-red-700 font-bold cursor-pointer'
         >
           Delete Account
         </span>
-            <span onClick={handleSignOut} className='text-slate-600 cursor-pointer'>
+            <span onClick={handleSignOut} className='text-slate-600 font-bold cursor-pointer'>
           Sign Out
         </span>
         </div>
@@ -206,7 +227,7 @@ export default function Profile() {
 
         {userListings && userListings.length > 0 && (<div className='flex flex-col gap-4'>
             <h3 className='text-center mt-7 text-2xl font-semibold'>
-                Your Listings
+                {currentUser.username} Listings
             </h3>
             {userListings.map((listing) => (<div
                 key={listing._id}
@@ -214,7 +235,7 @@ export default function Profile() {
             >
                 <Link to={`/listing/${listing._id}`}>
                     <img
-                        src={listing.imageUrls[0]}
+                        src={listing.imageURLs[0]}
                         alt='listing cover'
                         className='h-16 w-16 object-contain'
                     />
@@ -226,16 +247,17 @@ export default function Profile() {
                     <p>{listing.name}</p>
                 </Link>
 
-                <div className='flex flex-col item-center'>
+                <div className='flex flex-row gap-5 item-center'>
+                    <Link to={`/update-listing/${listing._id}`}>
+                        <button className='text-yellow-400 font-bold uppercase'>Edit</button>
+                    </Link>
                     <button
                         onClick={() => handleDeleteListing(listing._id)}
-                        className='text-red-700 uppercase'
+                        className='text-red-700 font-bold uppercase'
                     >
                         Delete
                     </button>
-                    <Link to={`/update-listing/${listing._id}`}>
-                        <button className='text-green-700 uppercase'>Edit</button>
-                    </Link>
+
                 </div>
             </div>))}
         </div>)}
