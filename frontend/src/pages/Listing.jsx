@@ -9,7 +9,6 @@ import {
     FaBath, FaBed, FaChair, FaMapMarkedAlt, FaMapMarkerAlt, FaParking, FaShare,
 } from 'react-icons/fa';
 
-
 export default function Listing() {
     SwiperCore.use([Navigation]);
     const [listing, setListing] = useState(null);
@@ -72,7 +71,7 @@ export default function Listing() {
                         />
                     </div>
                     {copied && (<p className='fixed top-[23%] right-[5%] z-10 rounded-md bg-slate-100 p-2'>
-                            Link copied!
+                            Link Copied!
                         </p>)}
                     <div className='flex flex-col max-w-4xl mx-auto p-3 my-7 gap-4'>
                         <p className='text-2xl font-semibold'>
@@ -80,7 +79,7 @@ export default function Listing() {
                             {listing.offer ? listing.discountPrice.toLocaleString('en-US') : listing.regularPrice.toLocaleString('en-US')}
                             {listing.type === 'rent' && ' / month'}
                         </p>
-                        <p className='flex items-center mt-6 gap-2 text-slate-600  text-sm'>
+                        <p className='flex items-center mt-2 gap-2 text-slate-600  text-sm'>
                             <FaMapMarkerAlt className='text-green-700'/>
                             {listing.address}
                         </p>
@@ -108,7 +107,7 @@ export default function Listing() {
                             </li>
                             <li className='flex items-center gap-1 whitespace-nowrap '>
                                 <FaParking className='text-lg'/>
-                                {listing.parking ? 'Parking spot' : 'No Parking'}
+                                {listing.parking ? 'Parking' : 'No Parking'}
                             </li>
                             <li className='flex items-center gap-1 whitespace-nowrap '>
                                 <FaChair className='text-lg'/>
