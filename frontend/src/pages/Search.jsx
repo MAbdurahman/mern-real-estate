@@ -5,7 +5,7 @@ import ListingItem from "../components/ListingItem.jsx";
 
 export default function Search() {
     const navigate = useNavigate();
-    const [sidebardata, setSidebardata] = useState({
+    const [sidebarData, setSidebarData] = useState({
         searchTerm: '',
         type: 'all',
         parking: false,
@@ -19,13 +19,89 @@ export default function Search() {
     const [listings, setListings] = useState([]);
     const [showMore, setShowMore] = useState(false);
 
+    console.log(listings);
 
     useEffect(() => {
-        console.log('useEffect() called');
-    }, []);
+        const urlParams = new URLSearchParams(location.search);
+        const searchTermFromUrl = urlParams.get('searchTerm');
+        const typeFromUrl = urlParams.get('type');
+        const parkingFromUrl = urlParams.get('parking');
+        const furnishedFromUrl = urlParams.get('furnished');
+        const offerFromUrl = urlParams.get('offer');
+        const sortFromUrl = urlParams.get('sort');
+        const orderFromUrl = urlParams.get('order');
+
+        if (
+            searchTermFromUrl ||
+            typeFromUrl ||
+            parkingFromUrl ||
+            furnishedFromUrl ||
+            offerFromUrl ||
+            sortFromUrl ||
+            orderFromUrl
+        ) {
+            setSidebarData({
+                searchTerm: searchTermFromUrl || '',
+                type: typeFromUrl || 'all',
+                parking: parkingFromUrl === 'true' ? true : false,
+                furnished: furnishedFromUrl === 'true' ? true : false,
+                offer: offerFromUrl === 'true' ? true : false,
+                sort: sortFromUrl || 'created_at',
+                order: orderFromUrl || 'desc',
+            });
+        }
+
+
+        const fetchListings = async () => {
+            setLoading(true);
+            setShowMore(false);
+            const searchQuery = urlParams.toString();
+            const res = await fetch(`/api/v1.0/listing/get-all-listings?${searchQuery}`);
+            const data = await res.json();
+            if (data.length > 8) {
+                setShowMore(true);
+            } else {
+                setShowMore(false);
+            }
+            setListings(data);
+            setLoading(false);
+        };
+
+        fetchListings();
+    }, [location.search]);
 
     function handleChange (e) {
-        console.log('handleChange', e.target);
+        if (
+            e.target.id === 'all' ||
+            e.target.id === 'rent' ||
+            e.target.id === 'sell'
+        ) {
+            setSidebarData({ ...sidebarData, type: e.target.id });
+        }
+
+        if (e.target.id === 'searchTerm') {
+            setSidebarData({ ...sidebarData, searchTerm: e.target.value });
+        }
+
+        if (
+            e.target.id === 'parking' ||
+            e.target.id === 'furnished' ||
+            e.target.id === 'offer'
+        ) {
+            setSidebarData({
+                ...sidebarData,
+                [e.target.id]:
+                    e.target.checked || e.target.checked === 'true' ? true : false,
+            });
+        }
+
+        if (e.target.id === 'sort_order') {
+            const sort = e.target.value.split('_')[0] || 'created_at';
+
+            const order = e.target.value.split('_')[1] || 'desc';
+
+            setSidebarData({ ...sidebarData, sort, order });
+        }
     }
 
 
@@ -35,7 +111,17 @@ export default function Search() {
 
 
     function handleSubmit(e) {
-        log.info('handleSubmit', e.target);
+        e.preventDefault();
+        const urlParams = new URLSearchParams();
+        urlParams.set('searchTerm', sidebarData.searchTerm);
+        urlParams.set('type', sidebarData.type);
+        urlParams.set('parking', sidebarData.parking);
+        urlParams.set('furnished', sidebarData.furnished);
+        urlParams.set('offer', sidebarData.offer);
+        urlParams.set('sort', sidebarData.sort);
+        urlParams.set('order', sidebarData.order);
+        const searchQuery = urlParams.toString();
+        navigate(`/search?${searchQuery}`);
     }
 
 
@@ -52,7 +138,7 @@ export default function Search() {
                             id='searchTerm'
                             placeholder='Search...'
                             className='border rounded-lg p-3 w-full'
-                            value={sidebardata.searchTerm}
+                            value={sidebarData.searchTerm}
                             onChange={handleChange}
                         />
                     </div>
@@ -64,7 +150,7 @@ export default function Search() {
                                 id='all'
                                 className='w-5'
                                 onChange={handleChange}
-                                checked={sidebardata.type === 'all'}
+                                checked={sidebarData.type === 'all'}
                             />
                             <span>Rent & Sell</span>
                         </div>
@@ -74,17 +160,17 @@ export default function Search() {
                                 id='rent'
                                 className='w-5'
                                 onChange={handleChange}
-                                checked={sidebardata.type === 'rent'}
+                                checked={sidebarData.type === 'rent'}
                             />
                             <span>Rent</span>
                         </div>
                         <div className='flex gap-2'>
                             <input
                                 type='checkbox'
-                                id='sale'
+                                id='sell'
                                 className='w-5'
                                 onChange={handleChange}
-                                checked={sidebardata.type === 'sale'}
+                                checked={sidebarData.type === 'sell'}
                             />
                             <span>Sell</span>
                         </div>
@@ -94,7 +180,7 @@ export default function Search() {
                                 id='offer'
                                 className='w-5'
                                 onChange={handleChange}
-                                checked={sidebardata.offer}
+                                checked={sidebarData.offer}
                             />
                             <span>Offer</span>
                         </div>
@@ -107,7 +193,7 @@ export default function Search() {
                                 id='parking'
                                 className='w-5'
                                 onChange={handleChange}
-                                checked={sidebardata.parking}
+                                checked={sidebarData.parking}
                             />
                             <span>Parking</span>
                         </div>
@@ -117,7 +203,7 @@ export default function Search() {
                                 id='furnished'
                                 className='w-5'
                                 onChange={handleChange}
-                                checked={sidebardata.furnished}
+                                checked={sidebarData.furnished}
                             />
                             <span>Furnished</span>
                         </div>
