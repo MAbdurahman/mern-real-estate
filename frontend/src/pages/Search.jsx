@@ -124,7 +124,6 @@ export default function Search() {
         navigate(`/search?${searchQuery}`);
     }
 
-
     return (
         <div className='flex flex-col md:flex-row'>
             <div className='p-7  border-b-2 md:border-r-2 md:min-h-screen'>
@@ -233,12 +232,12 @@ export default function Search() {
                 </h2>
                 <div className='p-7 flex flex-wrap gap-4'>
                     {!loading && listings.length === 0 && (
-                        <p className='text-xl text-slate-700'>No Listing Found!</p>
+                        <h4 className='text-xl text-slate-700'>No Listing Found!</h4>
                     )}
                     {loading && (
-                        <p className='text-xl text-slate-700 text-center w-full'>
+                        <h4 className='text-xl text-slate-700 text-center w-full'>
                             Loading...
-                        </p>
+                        </h4>
                     )}
 
                     {!loading &&
