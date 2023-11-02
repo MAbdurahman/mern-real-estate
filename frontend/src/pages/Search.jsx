@@ -104,9 +104,18 @@ export default function Search() {
         }
     }
 
-
-    function handleShowMoreClick() {
-        console.log('handleShowMoreClick')
+    async function handleShowMoreClick() {
+        const numberOfListings = listings.length;
+        const startIndex = numberOfListings;
+        const urlParams = new URLSearchParams(location.search);
+        urlParams.set('startIndex', startIndex);
+        const searchQuery = urlParams.toString();
+        const res = await fetch(`/api/v1.0/listing/get-all-listings?${searchQuery}`);
+        const data = await res.json();
+        if (data.length < 9) {
+            setShowMore(false);
+        }
+        setListings([...listings, ...data]);
     }
 
 
