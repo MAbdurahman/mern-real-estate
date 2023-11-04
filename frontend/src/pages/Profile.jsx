@@ -58,7 +58,7 @@ export default function Profile() {
         try {
             dispatch(updateUserStart());
             const res = await fetch(`/api/v1.0/user/update-user/${currentUser._id}`, {
-                method: 'POST', headers: {
+                method: 'PUT', headers: {
                     'Content-Type': 'application/json',
                 }, body: JSON.stringify(formData),
             });
@@ -70,6 +70,9 @@ export default function Profile() {
 
             dispatch(updateUserSuccess(data));
             setUpdateSuccess(true);
+            setTimeout(() => {
+                setUpdateSuccess(false);
+            },5000);
 
         } catch (err) {
             dispatch(updateUserFailure(err.message));
