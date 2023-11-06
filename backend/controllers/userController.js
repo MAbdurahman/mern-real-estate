@@ -5,7 +5,7 @@ import {errorHandler} from "../utils/errorHandler.js";
 
 export const test = (req, res) => {
     res.json({
-        message: 'API Home for mern-real-estate is working.'
+        message: 'API for mern-real-estate user/test is working.'
     })
 }
 
