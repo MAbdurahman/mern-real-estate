@@ -1,6 +1,6 @@
 export default function About() {
 
-    return (<div className='py-20 px-4 max-w-6xl mx-auto'>
+    return (<div className='min-h-screen h-3/5 pt-24 px-4 mt-0 pb-0 max-w-6xl mx-auto'>
             <h2 className='text-3xl font-bold mb-4 text-slate-800'>About Us</h2>
             <p className='mb-4 text-slate-700'>RealEstate is a leading real estate agency that specializes in helping
                 clients buy, sell, and rent properties in the most desirable neighborhoods. Our team of experienced

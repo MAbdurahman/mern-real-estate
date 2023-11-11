@@ -8,6 +8,7 @@ import SignUp from "./pages/SignUp.jsx";
 import CreateListing from "./pages/CreateListing.jsx";
 import UpdateListing from "./pages/UpdateListing.jsx";
 import PageNotFound from "./pages/PageNotFound.jsx";
+import Footer from "./layouts/Footer.jsx";
 import PrivateRoute from "./components/PrivateRoute.jsx";
 import Listing from "./pages/Listing.jsx";
 import Search from "./pages/Search.jsx";
@@ -30,6 +31,7 @@ export default function App() {
                 </Route>
                 <Route path={"*"} element={<PageNotFound/>}/>
             </Routes>
+            <Footer />
         </BrowserRouter>
 
     );
